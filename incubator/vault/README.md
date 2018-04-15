@@ -60,6 +60,32 @@ The following table lists the configurable parameters of the Vault chart and the
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 
+## Initialising Vault
+
+Because the the deployment has been configured to only mark the pod as ready once it is initialised, it will need to be 
+initialised prior to it becoming available as the service.
+
+Both unsealing and initialising can be completed using:
+
+```console
+$ kubectl port-forward vault-pod 8200
+$ export VAULT_ADDR=http://127.0.0.1:8200
+```
+
+and either:
+
+```console
+$ vault operator init
+```
+
+or
+
+```console
+$ vault operator unseal
+```
+
+respectively. Once unsealed, the pod will be marked as healthy and become available via the service.
+
 ## Using Vault
 
 Once the Vault pod is ready, it can be accessed using a `kubectl
